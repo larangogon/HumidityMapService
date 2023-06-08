@@ -1,6 +1,10 @@
-window.Vue = require('vue').default;
-Vue.component('form-component', require('./components/FormComponent').default);
+import Vue from 'vue';
+import FormComponent from './components/FormComponent';
+
+require('./bootstrap');
+
+Vue.component('form-component', FormComponent);
 
 new Vue({
     el: '#app'
-})
+});

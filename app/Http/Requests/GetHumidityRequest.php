@@ -24,7 +24,7 @@ class GetHumidityRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'cityId' => ['required', Rule::exists('cities', 'id'), 'integer'],
+            'cityId' => ['required', Rule::exists('cities', 'id')],
         ];
     }
 }
