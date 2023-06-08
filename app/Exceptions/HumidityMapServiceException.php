@@ -2,6 +2,8 @@
 
 namespace App\Exceptions;
 
-class HumidityMapServiceException extends \Exception
+use Exception;
+
+class HumidityMapServiceException extends Exception
 {
 }

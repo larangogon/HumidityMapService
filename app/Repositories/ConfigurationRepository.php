@@ -11,11 +11,13 @@ use App\Models\History;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class ConfigurationRepository implements ConfigurationContract
 {
     /**
-     * @throws GuzzleException
+     * @throws GuzzleException|HumidityMapServiceException
      */
     public function getHumidity(GetHumidityRequest $request): string|int
     {
@@ -62,9 +64,10 @@ class ConfigurationRepository implements ConfigurationContract
 
             $data = json_decode($response->getBody(), true);
 
-            return data_get($data, 'current.humidity');
+            return data_get($data, 'current.humidity', 'no se encontro humedad');
         } catch (ClientException $e) {
-            throw new HumidityMapServiceException('Ocurrió un error de cliente.', 500, $e->getMessage());
+            Log::info(Str::uuid(), ['mensage' => $e->getMessage()]);
+            throw new HumidityMapServiceException('Ocurrió un error de cliente.');
         }
     }
 }

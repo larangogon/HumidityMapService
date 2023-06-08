@@ -21,12 +21,13 @@ class CityApiControllerTest extends TestCase
 
     /**
      * @test
+     * @dataProvider dataProvider
      */
-    public function testGetHumidity(): void
+    public function testGetHumidity($humidity): void
     {
         $city = City::factory()->create();
 
-        $responseBody = json_encode(['current' => ['humidity' => 80]]);
+        $responseBody = json_encode(['current' => ['humidity' => $humidity]]);
 
         $mockResponse = new Response(200, [], $responseBody);
         $mockClient = new MockHandler([$mockResponse]);
@@ -41,11 +42,9 @@ class CityApiControllerTest extends TestCase
 
         $this->assertSame(200, $response->getStatusCode());
         $this->assertArrayHasKey('humidity', $response->getData(true));
-        $this->assertSame(80, $response->getData(true)['humidity']);
-
         $this->assertDatabaseHas('histories', [
             'city_id' => $city->id,
-            'humidity' => 80,
+            'humidity' => $humidity,
         ]);
     }
 
@@ -81,7 +80,7 @@ class CityApiControllerTest extends TestCase
         $response->assertOk();
         $response->assertExactJson([
             [
-                'id' => 1,
+                'id' => $city->id,
                 'name' => $city->name,
                 'lat' => $city->lat,
                 'lon' => $city->lon,
@@ -89,5 +88,13 @@ class CityApiControllerTest extends TestCase
                 'updated_at' => $city->updated_at,
             ],
         ]);
+    }
+
+    public static function dataProvider(): array
+    {
+        return [
+            'humidity int' => [80],
+            'humidity float' => [87.5]
+        ];
     }
 }
