@@ -94,7 +94,7 @@ class CityApiControllerTest extends TestCase
     {
         return [
             'humidity int' => [80],
-            'humidity float' => [87.5]
+            'humidity float' => [87.5],
         ];
     }
 }

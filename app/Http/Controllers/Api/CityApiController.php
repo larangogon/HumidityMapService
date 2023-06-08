@@ -7,8 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\GetHumidityRequest;
 use App\Models\City;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 class CityApiController extends Controller
 {
