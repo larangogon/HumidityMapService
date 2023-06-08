@@ -12,6 +12,7 @@ class CityController extends Controller
     public function index(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         $cities = City::all();
+
         return view('index', compact('cities'));
     }
 }

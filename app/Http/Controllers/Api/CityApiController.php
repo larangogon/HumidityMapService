@@ -12,6 +12,13 @@ use Illuminate\Support\Facades\Config;
 
 class CityApiController extends Controller
 {
+    public function index(): JsonResponse
+    {
+        $cities = City::all();
+
+        return response()->json($cities);
+    }
+
     /**
      * @throws GuzzleException
      */
@@ -30,28 +37,28 @@ class CityApiController extends Controller
     }
 
     /**
-     * @throws GuzzleException
-     */
-    private function getHumidityFromExternalAPI(City $city)
-    {
-        $response = $this->getClient()->get( 'https://api.openweathermap.org/data/3.0/onecall', [
-            'query' => [
-                'lat' => $city->lat,
-                'lon' => $city->lon,
-                'appid' => Config::get('app.appid_open_weather')
-            ]
-        ]);
-
-        $data = json_decode($response->getBody(), true);
-
-        return data_get($data, 'current.humidity');
-    }
-
-    /**
      * @return ClientContract
      */
     protected function getClient()
     {
         return app(ClientContract::class);
+    }
+
+    /**
+     * @throws GuzzleException
+     */
+    private function getHumidityFromExternalAPI(City $city)
+    {
+        $response = $this->getClient()->get('https://api.openweathermap.org/data/3.0/onecall', [
+            'query' => [
+                'lat' => $city->lat,
+                'lon' => $city->lon,
+                'appid' => Config::get('app.appid_open_weather'),
+            ],
+        ]);
+
+        $data = json_decode($response->getBody(), true);
+
+        return data_get($data, 'current.humidity');
     }
 }

@@ -1,1 +1,5 @@
-{}
+{
+    "/js/app.js": "/js/app.js",
+    "/sass/bootstrap.css": "/sass/bootstrap.css",
+    "/sass/app.css": "/sass/app.css"
+}

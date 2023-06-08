@@ -6,15 +6,15 @@ use App\Contracts\ClientContract;
 use App\Http\Controllers\Api\CityApiController;
 use App\Http\Requests\GetHumidityRequest;
 use App\Models\City;
+use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\App;
 use Tests\TestCase;
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Response;
-use Illuminate\Http\JsonResponse;
 
 class CityApiControllerTest extends TestCase
 {
@@ -24,7 +24,7 @@ class CityApiControllerTest extends TestCase
     /**
      * @test
      */
-    public function testGetHumidity()
+    public function testGetHumidity(): void
     {
         $city = City::factory()->create();
 

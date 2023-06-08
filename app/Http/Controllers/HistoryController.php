@@ -13,7 +13,7 @@ class HistoryController extends Controller
     {
         $histories = History::with('city')
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(10);
 
         return view('history', compact('histories'));
     }

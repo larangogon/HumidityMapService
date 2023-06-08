@@ -24,9 +24,9 @@ class CityFactory extends Factory
 
         foreach ($data as $country) {
             $_data[] = array_replace_recursive($country, [
-                'name' => json_encode($country['name']),
-                'lat' => json_encode($country['lat']),
-                'lon' => json_encode($country['lon']),
+                'name' => $country['name'],
+                'lat' => $country['lat'],
+                'lon' => $country['lon'],
             ]);
         }
 

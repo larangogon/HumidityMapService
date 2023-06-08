@@ -17,3 +17,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [CityController::class, 'index'])->name('city.index');
 Route::get('/history', [HistoryController::class, 'index'])->name('history.index');
+Route::view('/map', 'map')->name('map');

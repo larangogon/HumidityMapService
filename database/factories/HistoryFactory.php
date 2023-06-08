@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\History;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\History>
+ * @extends Factory<History>
  */
 class HistoryFactory extends Factory
 {
@@ -17,7 +18,8 @@ class HistoryFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'city_id' => 1,
+            'humidity' => 91,
         ];
     }
 }

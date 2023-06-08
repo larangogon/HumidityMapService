@@ -12,16 +12,16 @@ class CitySeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $filePath = base_path('resources/docs/cities.json');
         $data = collect(json_decode(file_get_contents($filePath), true));
 
         foreach ($data as $country) {
             City::factory()->create([
-                'name' => json_encode($country['name']),
-                'lat' => json_encode($country['lat']),
-                'lon' => json_encode($country['lon']),
+                'name' => $country['name'],
+                'lat' => $country['lat'],
+                'lon' => $country['lon'],
             ]);
         }
     }

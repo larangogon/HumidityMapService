@@ -15,3 +15,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/cities/humidity', [CityApiController::class, 'getHumidity'])->name('city.getHumidity');
+Route::get('/cities', [CityApiController::class, 'index']);

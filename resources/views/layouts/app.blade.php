@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>HumidityMapServices</title>
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('sass/app.sass') }}">
     <script src="{{ asset('js/app.js') }}" defer></script>
 </head>
 <body>
@@ -25,6 +25,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('history.index') }}">Historial</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('map') }}">Seleccione ciudad en el mapa</a>
                     </li>
                 </ul>
             </div>

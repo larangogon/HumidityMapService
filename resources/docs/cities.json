@@ -1,1 +1,1 @@
-{"1":{"name":{"en":"Miami","es":"Miami"},"lat":"25.77427","lon":"-80.19366"}, "2":{"name":{"en":"New York","es":"New York"},"lat":"40.71427","lon":"-74.00597"},"3":{"name":{"en":"Orlando","es":"Orlando"},"lat":"28.53834","lon":"-81.37924"}}
+{"1":{"name":"Miami","lat":25.77427,"lon":-80.19366}, "2":{"name":"New York","lat":40.71427,"lon":-74.00597},"3":{"name":"Orlando","lat":28.53834,"lon":-81.37924}}
