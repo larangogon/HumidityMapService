@@ -3,8 +3,6 @@
 namespace Tests\Feature\Api;
 
 use App\Contracts\ClientContract;
-use App\Http\Controllers\Api\CityApiController;
-use App\Http\Requests\GetHumidityRequest;
 use App\Models\City;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
@@ -12,7 +10,6 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Tests\TestCase;
@@ -75,23 +72,22 @@ class CityApiControllerTest extends TestCase
     public function getCitiesAll(): void
     {
         $city = City::factory()->create([
-            "name" => "New York",
-            "lat" => "40.71427",
-            "lon" => "-74.00597",
+            'name' => 'New York',
+            'lat' => '40.71427',
+            'lon' => '-74.00597',
         ]);
 
         $response = $this->getJson(route('cities'));
         $response->assertOk();
         $response->assertExactJson([
             [
-                "id" => 1,
-                "name" => $city->name,
-                "lat" => $city->lat,
-                "lon" => $city->lon,
-                "created_at" => $city->created_at,
-                "updated_at" => $city->updated_at
+                'id' => 1,
+                'name' => $city->name,
+                'lat' => $city->lat,
+                'lon' => $city->lon,
+                'created_at' => $city->created_at,
+                'updated_at' => $city->updated_at,
             ],
         ]);
     }
-
 }

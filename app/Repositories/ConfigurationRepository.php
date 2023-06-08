@@ -51,7 +51,7 @@ class ConfigurationRepository implements ConfigurationContract
      */
     private function getHumidityFromExternalAPI(City $city)
     {
-        try{
+        try {
             $response = $this->getClient()->get('https://api.openweathermap.org/data/3.0/onecall', [
                 'query' => [
                     'lat' => $city->lat,
@@ -63,9 +63,8 @@ class ConfigurationRepository implements ConfigurationContract
             $data = json_decode($response->getBody(), true);
 
             return data_get($data, 'current.humidity');
-
-        }catch (ClientException $e){
-            throw new HumidityMapServiceException("Ocurrió un error de cliente.", 500, $e->getMessage());
+        } catch (ClientException $e) {
+            throw new HumidityMapServiceException('Ocurrió un error de cliente.', 500, $e->getMessage());
         }
     }
 }
