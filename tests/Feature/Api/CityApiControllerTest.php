@@ -14,6 +14,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Tests\TestCase;
 
 class CityApiControllerTest extends TestCase
@@ -39,16 +40,8 @@ class CityApiControllerTest extends TestCase
             return  new Client(['handler' => $handlerStack]);
         });
 
-        $controller = new CityApiController();
-        $request = $this->createMock(GetHumidityRequest::class);
-        $request->expects($this->once())
-            ->method('input')
-            ->with('cityId')
-            ->willReturn($city->id);
+        $response = $this->postJson(route('cities.getHumidity'), ['cityId' => $city->id]);
 
-        $response = $controller->getHumidity($request);
-
-        $this->assertInstanceOf(JsonResponse::class, $response);
         $this->assertSame(200, $response->getStatusCode());
         $this->assertArrayHasKey('humidity', $response->getData(true));
         $this->assertSame(80, $response->getData(true)['humidity']);
@@ -58,4 +51,47 @@ class CityApiControllerTest extends TestCase
             'humidity' => 80,
         ]);
     }
+
+    /**
+     * @test
+     */
+    public function getHumidityError(): void
+    {
+        $city = City::factory()->create();
+
+        Config::set('app.appid_open_weather', '');
+
+        $this->postJson(route('cities.getHumidity'), ['cityId' => $city->id]);
+
+        $this->assertDatabaseMissing('histories', [
+            'city_id' => $city->id,
+            'humidity' => 80,
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function getCitiesAll(): void
+    {
+        $city = City::factory()->create([
+            "name" => "New York",
+            "lat" => "40.71427",
+            "lon" => "-74.00597",
+        ]);
+
+        $response = $this->getJson(route('cities'));
+        $response->assertOk();
+        $response->assertExactJson([
+            [
+                "id" => 1,
+                "name" => $city->name,
+                "lat" => $city->lat,
+                "lon" => $city->lon,
+                "created_at" => $city->created_at,
+                "updated_at" => $city->updated_at
+            ],
+        ]);
+    }
+
 }

@@ -4,9 +4,11 @@ namespace App\Repositories;
 
 use App\Contracts\ClientContract;
 use App\Contracts\ConfigurationContract;
+use App\Exceptions\HumidityMapServiceException;
 use App\Http\Requests\GetHumidityRequest;
 use App\Models\City;
 use App\Models\History;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Config;
 
@@ -45,20 +47,25 @@ class ConfigurationRepository implements ConfigurationContract
     }
 
     /**
-     * @throws GuzzleException
+     * @throws GuzzleException|HumidityMapServiceException
      */
     private function getHumidityFromExternalAPI(City $city)
     {
-        $response = $this->getClient()->get('https://api.openweathermap.org/data/3.0/onecall', [
-            'query' => [
-                'lat' => $city->lat,
-                'lon' => $city->lon,
-                'appid' => Config::get('app.appid_open_weather'),
-            ],
-        ]);
+        try{
+            $response = $this->getClient()->get('https://api.openweathermap.org/data/3.0/onecall', [
+                'query' => [
+                    'lat' => $city->lat,
+                    'lon' => $city->lon,
+                    'appid' => Config::get('app.appid_open_weather'),
+                ],
+            ]);
 
-        $data = json_decode($response->getBody(), true);
+            $data = json_decode($response->getBody(), true);
 
-        return data_get($data, 'current.humidity');
+            return data_get($data, 'current.humidity');
+
+        }catch (ClientException $e){
+            throw new HumidityMapServiceException("Ocurrió un error de cliente.", 500, $e->getMessage());
+        }
     }
 }
