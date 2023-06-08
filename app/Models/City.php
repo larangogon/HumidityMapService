@@ -7,9 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @property string name
- * @property string lat
- * @property string lon
+ * @property int $id
+ * @property string $name
+ * @property string $lat
+ * @property string $lon
  */
 class City extends Model
 {

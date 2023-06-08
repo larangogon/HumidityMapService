@@ -52,5 +52,10 @@ class CityApiControllerTest extends TestCase
         $this->assertSame(200, $response->getStatusCode());
         $this->assertArrayHasKey('humidity', $response->getData(true));
         $this->assertSame(80, $response->getData(true)['humidity']);
+
+        $this->assertDatabaseHas('histories', [
+            'city_id' => $city->id,
+            'humidity' => 80,
+        ]);
     }
 }

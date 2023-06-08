@@ -6,6 +6,7 @@ use App\Contracts\ClientContract;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetHumidityRequest;
 use App\Models\City;
+use App\Models\History;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Config;
@@ -25,6 +26,8 @@ class CityApiController extends Controller
     public function getHumidity(GetHumidityRequest $request): JsonResponse
     {
         $cityId = $request->input('cityId');
+
+        /** @var City $city */
         $city = City::find($cityId);
 
         if (!$city) {
@@ -32,6 +35,11 @@ class CityApiController extends Controller
         }
 
         $humidity = $this->getHumidityFromExternalAPI($city);
+
+        History::create([
+            'humidity' => $humidity,
+            'city_id' => $city->id
+        ]);
 
         return response()->json(['humidity' => $humidity]);
     }

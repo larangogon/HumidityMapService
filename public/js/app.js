@@ -17256,7 +17256,7 @@ ${codeFrame}` : message);
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 window.Vue = (__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js")["default"]);
-Vue.component('form-component', (__webpack_require__(/*! ./components/FormComponent.vue */ "./resources/js/components/FormComponent.vue")["default"]));
+Vue.component('form-component', (__webpack_require__(/*! ./components/FormComponent */ "./resources/js/components/FormComponent.vue")["default"]));
 new Vue({
   el: '#app'
 });

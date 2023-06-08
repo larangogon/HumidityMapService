@@ -7,12 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int city_id
- * @property float humidity
+ * @property int $city_id
+ * @property float $humidity
  */
 class History extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['humidity', 'city_id'];
 
     public function city(): BelongsTo
     {
