@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Concrete\Client;
 use App\Contracts\ClientContract;
+use App\Contracts\ConfigurationContract;
+use App\Repositories\ConfigurationRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -30,6 +32,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->app->bind(ConfigurationContract::class, ConfigurationRepository::class);
     }
 }

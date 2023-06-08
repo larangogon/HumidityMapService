@@ -2,54 +2,63 @@
 
 namespace App\Repositories;
 
+use App\Contracts\ClientContract;
 use App\Contracts\ConfigurationContract;
-use App\DataObjects\ConfigurationData;
-use App\Models\Configuration;
-use App\Models\Merchant;
-use App\Models\Site;
-use Illuminate\Support\Facades\DB;
+use App\Http\Requests\GetHumidityRequest;
+use App\Models\City;
+use App\Models\History;
+use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Support\Facades\Config;
 
 class ConfigurationRepository implements ConfigurationContract
 {
-    public function store(ConfigurationData $data): array
+    /**
+     * @throws GuzzleException
+     */
+    public function getHumidity(GetHumidityRequest $request): string|int
     {
-        return DB::transaction(function () use ($data) {
-            $configuration = (new Configuration())
-                ->fillFromConfigurationData($data);
+        $cityId = $request->input('cityId');
 
-            $configuration->save();
+        /** @var City $city */
+        $city = City::find($cityId);
 
-            $document = explode('-', $data->merchant['document'])[0];
+        if (!$city) {
+            return response()->json(['error' => 'Ciudad no encontrada'], 404);
+        }
 
-            /** @var Merchant $merchant */
-            $merchant = Merchant::query()->firstOrCreate(
-                ['document' => $document],
-                array_replace($data->merchant, ['document' => $document])
-            );
+        $humidity = $this->getHumidityFromExternalAPI($city);
 
-            $sites = [];
+        History::create([
+            'humidity' => $humidity,
+            'city_id' => $city->id,
+        ]);
 
-            foreach ($data->sites as $siteData) {
-                $sites[] = Site::firstOrCreate(
-                    ['external_id' => $siteData['externalId']],
-                    [
-                        'external_id' => $siteData['externalId'],
-                        'merchant_id' => $merchant->id,
-                        'login' => $siteData['login'],
-                        'tran_key' => $siteData['tranKey'],
-                    ]
-                )->toArrayFormat();
-            }
-
-            return $configuration->toArrayFormat($merchant, $sites);
-        });
+        return $humidity;
     }
 
-    public function update(ConfigurationData $data, Configuration $configuration): Configuration
+    /**
+     * @return ClientContract
+     */
+    protected function getClient()
     {
-        $configuration->fillFromConfigurationData($data);
-        $configuration->save();
+        return app(ClientContract::class);
+    }
 
-        return $configuration;
+    /**
+     * @throws GuzzleException
+     */
+    private function getHumidityFromExternalAPI(City $city)
+    {
+        $response = $this->getClient()->get('https://api.openweathermap.org/data/3.0/onecall', [
+            'query' => [
+                'lat' => $city->lat,
+                'lon' => $city->lon,
+                'appid' => Config::get('app.appid_open_weather'),
+            ],
+        ]);
+
+        $data = json_decode($response->getBody(), true);
+
+        return data_get($data, 'current.humidity');
     }
 }
