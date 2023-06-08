@@ -1,0 +1,28 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\City;
+use Illuminate\Database\Seeder;
+
+class CitySeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        $filePath = base_path('resources/docs/cities.json');
+        $data = collect(json_decode(file_get_contents($filePath), true));
+
+        foreach ($data as $country) {
+            City::factory()->create([
+                'name' => json_encode($country['name']),
+                'lat' => json_encode($country['lat']),
+                'lon' => json_encode($country['lon']),
+            ]);
+        }
+    }
+}
